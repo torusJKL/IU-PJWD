@@ -16,7 +16,7 @@ export class SQLiteDal implements IDal {
                 "UNIQUE (name, year))");
     }
 
-    // function that adds the wine entry to the db and returns a status code
+    // method that adds the wine entry to the db and returns a status code
     addWineToDb(entry: wineEntry) : apiResponse {
 
         // create the insert query
@@ -34,7 +34,26 @@ export class SQLiteDal implements IDal {
             console.log(`Failed to add to db: ${error}`);
 
             // any statusCode other than 0 means that there is an issue
-            return { code: -1, message: "Failed to add the entry to the db." } ;
+            return { code: -1, message: "Failed to add the wine entry to the db." } ;
+        }
+    }
+
+    // method that retrieves all wine entries from the db
+    getWineFromDb() : wineEntry[] {
+
+        // create the select all wine entries
+        const query = this.db.query(`SELECT * FROM wines`);
+
+        try {
+            // run the query and cast it to a wineEntry array
+            const result = query.all() as wineEntry[];
+
+            return result;
+        } catch (error) {
+            console.log(`Failed to retrieve the wine entries from db: ${error}`);
+
+            // return an empty array instead of failing
+            return [];
         }
     }
 }

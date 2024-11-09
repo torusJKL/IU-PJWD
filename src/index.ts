@@ -11,9 +11,9 @@ const app = new Elysia()
   .use(swagger())
 
   // route to add new wine entries
-  .post('/add', ({ body, error }) => {
+  .post('/addWine', ({ body, error }) => {
     // use the class method to write to the DB
-    var status = db.addWineToDb(body);
+    const status = db.addWineToDb(body);
 
     // return a HTTP status code of 400 if there is an issue
     if (status.code != 0){
@@ -24,6 +24,14 @@ const app = new Elysia()
 	},
   // validate the mandatory fields of the received JSON
   { body: wineEntry })
+
+  // route to retrieve all wines entries
+  .get('/getWines', () => {
+    // use the class method to rertieve all wine entries of the db
+    const result = db.getWineFromDb();
+
+    return result;
+  })
 
   // make the api available on port 3000
   .listen(3000);
