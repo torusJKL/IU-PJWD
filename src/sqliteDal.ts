@@ -12,7 +12,7 @@ export class SQLiteDal implements IDal {
         // the combination of name and year must be unique.
         const db = new Database("winedb.sqlite", { create: true });
         db.run("CREATE TABLE IF NOT EXISTS wines " + 
-                "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, year INTEGER, rating INTEGER," +
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, year INTEGER, rating INTEGER, " +
                 "UNIQUE (name, year))");
     }
 
@@ -20,7 +20,7 @@ export class SQLiteDal implements IDal {
     addWineToDb(entry: wineEntry) : apiResponse {
 
         // create the insert query
-        const query = this.db.query(`INSERT INTO wines (name, year, rating)` +
+        const query = this.db.query(`INSERT INTO wines (name, year, rating) ` +
                                 `VALUES ('${entry.name}', ${entry.year}, ${entry.rating})`);
 
         try {
@@ -54,6 +54,29 @@ export class SQLiteDal implements IDal {
 
             // return an empty array instead of failing
             return [];
+        }
+    }
+
+    // method to update existing wine entry
+    updateWineInDb(entry: wineEntry) : apiResponse {
+
+        // create the update query
+        const query = this.db.query(`UPDATE wines ` +
+                                    `SET name = '${entry.name}', year = ${entry.year}, rating = ${entry.rating} ` +
+                                    `WHERE id = ${entry.id}`);
+
+        try {
+            // run the update query
+            query.run();
+
+            // statusCode 0 means everything went well
+            return { code: 0, message: "Success!" } ;
+        }
+        catch (error) {
+            console.log(`Failed to update db: ${error}`);
+
+            // any statusCode other than 0 means that there is an issue
+            return { code: -1, message: "Failed to update the wine entry in the db." } ;
         }
     }
 }

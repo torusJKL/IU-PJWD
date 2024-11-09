@@ -33,6 +33,21 @@ const app = new Elysia()
     return result;
   })
 
+  // route to update existing wine entires
+  .post('/updateWine', ({ body, error}) => {
+    // use the class method to write to the DB
+    const status = db.updateWineInDb(body);
+
+    // return a HTTP status code of 400 if there is an issue
+    if (status.code != 0){
+      return error(400, status)
+    }
+
+		return status
+  },
+  // validate the mandatory fields of the received JSON
+  { body: wineEntry })
+
   // make the api available on port 3000
   .listen(3000);
 
