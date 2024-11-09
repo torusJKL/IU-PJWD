@@ -21,7 +21,7 @@ export class SQLiteDal implements IDal {
 
         // create the insert query
         const query = this.db.query(`INSERT INTO wines (name, year, rating) ` +
-                                `VALUES ('${entry.name}', ${entry.year}, ${entry.rating})`);
+                                    `VALUES ('${entry.name}', ${entry.year}, ${entry.rating})`);
 
         try {
             // run the insert query
@@ -77,6 +77,28 @@ export class SQLiteDal implements IDal {
 
             // any statusCode other than 0 means that there is an issue
             return { code: -1, message: "Failed to update the wine entry in the db." } ;
+        }
+    }
+
+    // method to delete a wine entry
+    deleteWineFromDb(entry: wineEntry) : apiResponse {
+
+        // create the delete query
+        const query = this.db.query(`DELETE FROM wines ` +
+                                    `WHERE id = ${entry.id}`);
+
+        try {
+            // run the delete query
+            query.run();
+
+            // statusCode 0 means everything went well
+            return { code: 0, message: "Success!" } ;
+        }
+            catch (error) {
+            console.log(`Failed to delete from db: ${error}`);
+
+            // any statusCode other than 0 means that there is an issue
+            return { code: -1, message: "Failed to delete the wine entry from the db." } ;
         }
     }
 }

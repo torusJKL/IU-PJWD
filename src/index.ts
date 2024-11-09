@@ -34,9 +34,22 @@ const app = new Elysia()
   })
 
   // route to update existing wine entires
-  .post('/updateWine', ({ body, error}) => {
+  .put('/updateWine', ({ body, error }) => {
     // use the class method to write to the DB
     const status = db.updateWineInDb(body);
+
+    // return a HTTP status code of 400 if there is an issue
+    if (status.code != 0){
+      return error(400, status)
+    }
+
+		return status
+  },
+  // validate the mandatory fields of the received JSON
+  { body: wineEntry })
+
+  .delete('deleteWine', ({ body, error }) => {
+    const status = db.deleteWineFromDb(body);
 
     // return a HTTP status code of 400 if there is an issue
     if (status.code != 0){
