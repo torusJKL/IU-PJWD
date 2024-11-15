@@ -10,29 +10,19 @@ const WineList = ( { rating }: { rating: string }) => {
     // keep the wine list in this app state
     const [wines, setWines] = useState<wineEntry[]>([]);
 
-    // sort order app state (0: no order, 1: ascending, 2: descending)
-    const [sortOrder, setSortOrder] = useState<number>(0);
+    // sorting of columns. (e.g. year for ascending or -year for descending)
+    const [sorting, setSorting] = useState<string>("id");
 
     // will be called after pages' first render or rating or sortOrder is updated
     useEffect(() => {
         axios
             // get all wines from API
-            .get<wineEntry[]>("http://localhost:3000/getWines")
+            .get<wineEntry[]>(`http://localhost:3000/getWines?sorting=${sorting}`)
 
             // once promise is fullfilled
             .then(res => {
                 // assign data to local variable so that we can manipulate it easier
                 let wines = res.data;
-
-                // sort the wines by year ascending
-                if (sortOrder == 1){
-                    wines = wines.sort((a, b) => {return a.year - b.year})
-                }
-
-                // sort the wines by year descending
-                if (sortOrder == 2){
-                    wines = wines.sort((a, b) => {return b.year - a.year})
-                }
 
                 // check if the user has chosen a rating filter
                 if (rating != ""){
@@ -46,14 +36,14 @@ const WineList = ( { rating }: { rating: string }) => {
 
             // print errors to console if there is an issue
             .catch(err => console.log(err));
-    }, [rating, sortOrder]);
+    }, [rating, sorting]);
 
     const getSortOrderColor = (sortIcon: string): string => {
-        if (sortOrder == 1 && sortIcon == "asc"){
+        if (sortIcon == sorting){
             return "text-red-600";
         }
-            
-        if (sortOrder == 2 && sortIcon == "desc"){
+
+        if (sortIcon == sorting){
             return "text-red-600";
         }
 
@@ -66,12 +56,12 @@ const WineList = ( { rating }: { rating: string }) => {
                 <div className="flex min-h-full items-center">
                     <div className="flex justify-center w-1/4">Name</div>
                     <div className="flex justify-center w-1/4">Year
-                        <div className={ (getSortOrderColor("asc")) } style={{ cursor: 'pointer' }} role="button"
-                             onClick={ () => { sortOrder == 1 ? setSortOrder(0) : setSortOrder(1) }}>
+                        <div className={ (getSortOrderColor("year")) } style={{ cursor: 'pointer' }} role="button"
+                             onClick={ () => { sorting == "year" ? setSorting("id") : setSorting("year") }}>
                             <FontAwesomeIcon icon={faCaretUp} />
                         </div>
-                        <div className={ (getSortOrderColor("desc")) } style={{ cursor: 'pointer' }} role="button"
-                             onClick={ () => { sortOrder == 2 ? setSortOrder(0) : setSortOrder(2) }}>
+                        <div className={ (getSortOrderColor("-year")) } style={{ cursor: 'pointer' }} role="button"
+                             onClick={ () => { sorting == "-year" ? setSorting("id") : setSorting("-year") }}>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
                     </div>

@@ -17,7 +17,7 @@ export class SQLiteDal implements IDal {
     }
 
     // method that adds the wine entry to the db and returns a status code
-    addWineToDb(entry: wineEntry) : apiResponse {
+    addWineToDb(entry: wineEntry): apiResponse {
 
         // create the insert query
         const query = this.db.query(`INSERT INTO wines (name, year, rating) ` +
@@ -39,10 +39,19 @@ export class SQLiteDal implements IDal {
     }
 
     // method that retrieves all wine entries from the db
-    getWineFromDb() : wineEntry[] {
+    getWineFromDb(sorting: string): wineEntry[] {
 
-        // create the select all wine entries
-        const query = this.db.query(`SELECT * FROM wines`);
+        // define sort order based on if the first char is a "-" sign
+        const sortOrder = sorting.charAt(0) == "-" ? "desc" : "asc";
+
+        // remove the "-" sign if it is part of the column name
+        const sortColumn = sorting.charAt(0) == "-" ? sorting.substring(1) : sorting;
+
+        // create the order SQL string
+        const dbOrderBy = `ORDER BY ${sortColumn} ${sortOrder}`;
+
+        // create the select all wine entries including the order string
+        const query = this.db.query(`SELECT * FROM wines ${dbOrderBy}`);
 
         try {
             // run the query and cast it to a wineEntry array
@@ -58,7 +67,7 @@ export class SQLiteDal implements IDal {
     }
 
     // method to update existing wine entry
-    updateWineInDb(entry: wineEntry) : apiResponse {
+    updateWineInDb(entry: wineEntry): apiResponse {
 
         // create the update query
         const query = this.db.query(`UPDATE wines ` +
@@ -81,7 +90,7 @@ export class SQLiteDal implements IDal {
     }
 
     // method to delete a wine entry
-    deleteWineFromDb(entry: wineEntry) : apiResponse {
+    deleteWineFromDb(entry: wineEntry): apiResponse {
 
         // create the delete query
         const query = this.db.query(`DELETE FROM wines ` +

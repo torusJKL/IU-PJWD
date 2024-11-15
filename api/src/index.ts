@@ -30,11 +30,20 @@ const app = new Elysia()
   { body: wineEntry })
 
   // route to retrieve all wines entries
-  .get('/getWines', () => {
-    // use the class method to rertieve all wine entries of the db
-    const result = db.getWineFromDb();
+  .get('/getWines', ({ query }) => {
 
+    // make sure that no invalid sorting values are processed (SQL injection protection)
+    const allowedSorting = ["id", "-id", "name", "-name", "year", "-year", "rating", "-rating"];
+    if (false == allowedSorting.includes(query.sorting)){
+      return []
+    }
+
+    // use the class method to rertieve all wine entries of the db
+    const result = db.getWineFromDb(query.sorting);
     return result;
+  },
+  { query: t.Object({
+      sorting: t.String()})
   })
 
   // route to update existing wine entires
