@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { cors } from '@elysiajs/cors'
 import { swagger } from '@elysiajs/swagger'
 import { SQLiteDal } from "./sqliteDal";
-import { wineEntry } from "./types";
+import { wineEntry, wineUpdate, wineDelete } from "./types";
 
 // create the class to use SQLite
 const db = new SQLiteDal();
@@ -59,7 +59,7 @@ const app = new Elysia()
 		return status
   },
   // validate the mandatory fields of the received JSON
-  { body: wineEntry })
+  { body: wineUpdate })
 
   .delete('deleteWine', ({ body, error }) => {
     const status = db.deleteWineFromDb(body);
@@ -72,7 +72,7 @@ const app = new Elysia()
 		return status
   },
   // validate the mandatory fields of the received JSON
-  { body: wineEntry })
+  { body: wineDelete })
 
   // make the api available on port 3000
   .listen(3000);

@@ -2,8 +2,10 @@
 import { useEffect, useState } from "react";
 import { wineEntry } from "./types";
 import axios from "axios";
-import RatingStarts from "./RatingStars";
+import RatingStars from "./RatingStars";
 import TitleColumn from "./TitleColumn";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const WineList = ( { rating }: { rating: string }) => {
     // keep the wine list in this app state
@@ -37,6 +39,25 @@ const WineList = ( { rating }: { rating: string }) => {
             .catch(err => console.log(err));
     }, [rating, sorting]);
 
+    const deleteWine = (wine: wineEntry): void => {
+        // store the current state of wines in case we need to rollback the delete
+        const originalWines = [...wines];
+
+        // remove the wine from the state to immediatelly update the UI
+        setWines(wines.filter(w => w.id != wine.id));
+
+        axios
+            // delete the selected wine from the DB
+            .delete(`http://localhost:3000/deleteWine`, { data: { id: wine.id } })
+
+            // in case there is an issue print the error to the console
+            // and return the wines state to the original state
+            .catch((err) => {
+                console.log(err);
+                setWines(originalWines)
+            });
+    };
+
     return (
         <div className="flex flex-col gap-2 p-7 h-[500px] w-full justify-start items-center">
             <div className="h-14 w-5/6 bg-orange-300 rounded">
@@ -53,9 +74,14 @@ const WineList = ( { rating }: { rating: string }) => {
                     <div className="flex justify-center w-1/4">{wine.name}</div>
                     <div className="flex justify-center w-1/4">{wine.year}</div>
                     <div className="flex justify-center w-1/4">
-                        <RatingStarts rating={wine.rating} />
+                        <RatingStars rating={wine.rating} />
                     </div>
-                    <div className="flex justify-center w-1/4" key={wine.id}></div>
+                    <div className="flex justify-center w-1/4" key={wine.id}>
+                        <div className="px-2"
+                             onClick={ () => { deleteWine(wine) }}>
+                            <FontAwesomeIcon icon={faTrash} />
+                        </div>
+                    </div>
                 </div>
             </div>
             )}

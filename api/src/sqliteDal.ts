@@ -1,5 +1,5 @@
 import { Database } from "bun:sqlite";
-import { apiResponse, IDal, wineEntry } from "./types";
+import { apiResponse, IDal, wineEntry, wineDelete, wineUpdate } from "./types";
 
 // class that handles reading and writting to the SQLite database
 export class SQLiteDal implements IDal {
@@ -67,7 +67,7 @@ export class SQLiteDal implements IDal {
     }
 
     // method to update existing wine entry
-    updateWineInDb(entry: wineEntry): apiResponse {
+    updateWineInDb(entry: wineUpdate): apiResponse {
 
         // create the update query
         const query = this.db.query(`UPDATE wines ` +
@@ -90,7 +90,7 @@ export class SQLiteDal implements IDal {
     }
 
     // method to delete a wine entry
-    deleteWineFromDb(entry: wineEntry): apiResponse {
+    deleteWineFromDb(entry: wineDelete): apiResponse {
 
         // create the delete query
         const query = this.db.query(`DELETE FROM wines ` +

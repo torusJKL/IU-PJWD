@@ -1,4 +1,4 @@
-const RatingStarts = ( { rating }: { rating: number } ) => {
+const RatingStars = ( { rating }: { rating: number } ) => {
     return (
         <>
             {/* use 5 stars to display rating */}
@@ -25,4 +25,4 @@ const RatingStarts = ( { rating }: { rating: number } ) => {
 }
 
 // make the component available to other files
-export default RatingStarts;
+export default RatingStars;
