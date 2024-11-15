@@ -1,4 +1,5 @@
 import { Elysia, t } from "elysia";
+import { cors } from '@elysiajs/cors'
 import { swagger } from '@elysiajs/swagger'
 import { SQLiteDal } from "./sqliteDal";
 import { wineEntry } from "./types";
@@ -7,6 +8,9 @@ import { wineEntry } from "./types";
 const db = new SQLiteDal();
 
 const app = new Elysia()
+  // enable CORS and allow the frontend on to access the API
+  .use(cors({ origin:("http://localhost:5173") }))
+
   // provide a UI to test the API in the browser under http://localhost:3000/swagger
   .use(swagger())
 
