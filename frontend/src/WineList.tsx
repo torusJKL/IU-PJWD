@@ -30,7 +30,7 @@ const WineList = ( { rating }: { rating: string }) => {
                 }
 
                 // store all wines to the app state
-                setWines(res.data);
+                setWines(wines);
             })
 
             // print errors to console if there is an issue
