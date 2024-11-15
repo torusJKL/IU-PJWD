@@ -9,7 +9,7 @@ const db = new SQLiteDal();
 
 const app = new Elysia()
   // enable CORS and allow the frontend on to access the API
-  .use(cors({ origin:("http://localhost:5173") }))
+  .use(cors({ origin:(["http://localhost:5173", "http://localhost:4173"]) }))
 
   // provide a UI to test the API in the browser under http://localhost:3000/swagger
   .use(swagger())
