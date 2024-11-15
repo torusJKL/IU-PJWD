@@ -2,9 +2,8 @@
 import { useEffect, useState } from "react";
 import { wineEntry } from "./types";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import RatingStarts from "./RatingStars";
+import TitleColumn from "./TitleColumn";
 
 const WineList = ( { rating }: { rating: string }) => {
     // keep the wine list in this app state
@@ -38,34 +37,13 @@ const WineList = ( { rating }: { rating: string }) => {
             .catch(err => console.log(err));
     }, [rating, sorting]);
 
-    const getSortOrderColor = (sortIcon: string): string => {
-        if (sortIcon == sorting){
-            return "text-red-600";
-        }
-
-        if (sortIcon == sorting){
-            return "text-red-600";
-        }
-
-        return "text-black-600";
-    }
-
     return (
         <div className="flex flex-col gap-2 p-7 h-[500px] w-full justify-start items-center">
             <div className="h-14 w-5/6 bg-orange-300 rounded">
                 <div className="flex min-h-full items-center">
-                    <div className="flex justify-center w-1/4">Name</div>
-                    <div className="flex justify-center w-1/4">Year
-                        <div className={ (getSortOrderColor("year")) } style={{ cursor: 'pointer' }} role="button"
-                             onClick={ () => { sorting == "year" ? setSorting("id") : setSorting("year") }}>
-                            <FontAwesomeIcon icon={faCaretUp} />
-                        </div>
-                        <div className={ (getSortOrderColor("-year")) } style={{ cursor: 'pointer' }} role="button"
-                             onClick={ () => { sorting == "-year" ? setSorting("id") : setSorting("-year") }}>
-                            <FontAwesomeIcon icon={faCaretDown} />
-                        </div>
-                    </div>
-                    <div className="flex justify-center w-1/4">Rating</div>
+                    <TitleColumn columnName="name" sorting={sorting} onSelectSorting={(sort) => setSorting(sort)} />
+                    <TitleColumn columnName="year" sorting={sorting} onSelectSorting={(sort) => setSorting(sort)} />
+                    <TitleColumn columnName="rating" sorting={sorting} onSelectSorting={(sort) => setSorting(sort)} />
                     <div className="flex justify-center w-1/4">edit/delete</div>
                 </div>
             </div>
