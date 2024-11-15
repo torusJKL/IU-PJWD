@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WineList } from "./WineList";
+import WineList from "./WineList";
 import RatingSelector from "./RatingSelector";
 
 function App() {
