@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { WineList } from "./WineList";
+import RatingSelector from "./RatingSelector";
 
 function App() {
   // app state storage for the rating
@@ -14,18 +15,8 @@ function App() {
           <h1 className="text-4xl text-black font-bold">Wine list</h1>
         </div>
 
-        <select className="form-select text-center rounded bg-red-300"
-          // store selected rating to app state every time a change is registered
-          onChange={(event) => {setRating(event.target.value)}}>
-
-            {/* dropdown values and viable text*/}
-            <option value="">All</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
+        {/* inject rating selector component and retrieve rating */}
+        <RatingSelector onSelectRating={(rating) => setRating(rating)} />
       </div>
 
       {/* inject the Winelist component and provide it the rating value */}
