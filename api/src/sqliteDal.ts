@@ -17,24 +17,24 @@ export class SQLiteDal implements IDal {
     }
 
     // method that adds the wine entry to the db and returns a status code
-    addWineToDb(entry: wineEntry): apiResponse {
+    addWineToDb(entry: wineEntry): wineEntry {
 
         // create the insert query
         const query = this.db.query(`INSERT INTO wines (name, year, rating) ` +
                                     `VALUES ('${entry.name}', ${entry.year}, ${entry.rating})`);
 
         try {
-            // run the insert query
-            query.run();
+            // run the insert query and desrtuct the returned last row id
+            const { lastInsertRowid } = query.run();
 
-            // statusCode 0 means everything went well
-            return { code: 0, message: "Success!" } ;
+            // return the newly created entry with the last id
+            return { ...entry, id: Number(lastInsertRowid) };
         }
         catch (error) {
-            console.log(`Failed to add to db: ${error}`);
+            console.error(`Failed to add to db: ${error}`);
 
-            // any statusCode other than 0 means that there is an issue
-            return { code: -1, message: "Failed to add the wine entry to the db." } ;
+            // return the wine without a db id
+            return {...entry, id: undefined} ;
         }
     }
 
@@ -58,8 +58,9 @@ export class SQLiteDal implements IDal {
             const result = query.all() as wineEntry[];
 
             return result;
-        } catch (error) {
-            console.log(`Failed to retrieve the wine entries from db: ${error}`);
+        }
+        catch (error) {
+            console.error(`Failed to retrieve the wine entries from db: ${error}`);
 
             // return an empty array instead of failing
             return [];
@@ -82,7 +83,7 @@ export class SQLiteDal implements IDal {
             return { code: 0, message: "Success!" } ;
         }
         catch (error) {
-            console.log(`Failed to update db: ${error}`);
+            console.error(`Failed to update db: ${error}`);
 
             // any statusCode other than 0 means that there is an issue
             return { code: -1, message: "Failed to update the wine entry in the db." } ;
@@ -103,8 +104,8 @@ export class SQLiteDal implements IDal {
             // statusCode 0 means everything went well
             return { code: 0, message: "Success!" } ;
         }
-            catch (error) {
-            console.log(`Failed to delete from db: ${error}`);
+        catch (error) {
+            console.error(`Failed to delete from db: ${error}`);
 
             // any statusCode other than 0 means that there is an issue
             return { code: -1, message: "Failed to delete the wine entry from the db." } ;

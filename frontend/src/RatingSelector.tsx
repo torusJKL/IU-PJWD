@@ -6,7 +6,7 @@ interface Props {
 // Rating selector component that provides the selected value in the Props
 const RatingSelector = ({ onSelectRating }: Props) => {
     return (
-        <select className="form-select text-center rounded bg-red-300"
+        <select className="text-center rounded bg-red-300"
           // store selected rating to app state every time a change is registered
           onChange={(event) => {onSelectRating(event.target.value)}}>
 

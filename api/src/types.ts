@@ -34,7 +34,7 @@ message: string,
 
 // the interface for the database class
 export interface IDal {
-    addWineToDb(entry: wineEntry): apiResponse;
+    addWineToDb(entry: wineEntry): wineEntry;
     getWineFromDb(sorting: string): wineEntry[];
     updateWineInDb(entry: wineUpdate): apiResponse;
     deleteWineFromDb(entry: wineDelete): apiResponse;

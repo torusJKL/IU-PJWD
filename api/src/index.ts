@@ -17,14 +17,14 @@ const app = new Elysia()
   // route to add new wine entries
   .post('/addWine', ({ body, error }) => {
     // use the class method to write to the DB
-    const status = db.addWineToDb(body);
+    const newWine = db.addWineToDb(body);
 
     // return a HTTP status code of 400 if there is an issue
-    if (status.code != 0){
-      return error(400, status)
+    if (newWine.id == undefined){
+      return error(400)
     }
 
-		return status
+		return newWine
 	},
   // validate the mandatory fields of the received JSON
   { body: wineEntry })
@@ -42,6 +42,7 @@ const app = new Elysia()
     const result = db.getWineFromDb(query.sorting);
     return result;
   },
+  // validate the mandatory query parameter exists
   { query: t.Object({
       sorting: t.String()})
   })
