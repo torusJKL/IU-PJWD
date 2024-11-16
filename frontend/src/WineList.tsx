@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { wineEntry } from "./types";
 import axios from "axios";
-import RatingStars from "./RatingStars";
 import TitleColumn from "./TitleColumn";
 import WineInput from "./WineInput";
 import WineActions from "./WineActions";
+import WineFields from "./WineFields";
 
 const WineList = ( { rating }: { rating: string }) => {
     // keep the wine list in this app state
@@ -13,6 +13,17 @@ const WineList = ( { rating }: { rating: string }) => {
 
     // sorting of columns. (e.g. year for ascending or -year for descending)
     const [sorting, setSorting] = useState<string>("id");
+
+    // store ids of entries that the user is editing
+    const [winesInEditMode, setWinesInEditMode] = useState<number[]>([]);
+
+    // app state to store the input values before sending to the API
+    const [newWine, setNewWine] = useState<wineEntry>({
+        id: 0,
+        name: "",
+        year: new Date().getFullYear(),
+        rating: 1,
+    });
 
     // will be called after pages' first render or rating or sortOrder is updated
     useEffect(() => {
@@ -41,7 +52,11 @@ const WineList = ( { rating }: { rating: string }) => {
 
     return (
         <div className="flex flex-col gap-2 p-7 h-[500px] w-full justify-start items-center">
-            <WineInput onAddingWine={ (wine) => setWines([wine, ...wines]) } />
+            <WineInput
+                newWine={newWine}
+                onAddingWine={ (wine) => setWines([wine, ...wines]) }
+                onWineChange={ (newWine) => setNewWine(newWine) }
+            />
             <div className="min-h-14 w-5/6 bg-orange-300 rounded">
                 <div className="flex min-h-full items-center">
                     <TitleColumn columnName="name" sorting={sorting} onSelectSorting={(sort) => setSorting(sort)} />
@@ -53,13 +68,20 @@ const WineList = ( { rating }: { rating: string }) => {
             {wines.map(wine =>
             <div className="min-h-14 w-5/6 bg-slate-400 rounded" key={wine.id}>
                 <div className="flex min-h-full items-center">
-                    <div className="flex justify-center w-1/4">{wine.name}</div>
-                    <div className="flex justify-center w-1/4">{wine.year}</div>
-                    <div className="flex justify-center w-1/4">
-                        <RatingStars rating={wine.rating} />
-                    </div>
+                    <WineFields
+                        wine={wine}
+                        wines={wines}
+                        winesInEditMode={winesInEditMode}
+                        onWineChange={ (wines) => setWines(wines) }
+                    />
                     <div className="flex justify-center w-1/4" key={wine.id}>
-                        <WineActions wines={wines} wine={wine} onWineAction={ (wines) => setWines(wines) } />
+                        <WineActions
+                            wines={wines}
+                            wine={wine}
+                            winesInEditMode={winesInEditMode}
+                            onWineAction={ (wines) => setWines(wines) }
+                            onEditModeChange={ (winesInEditMode) => setWinesInEditMode(winesInEditMode) }
+                        />
                     </div>
                 </div>
             </div>

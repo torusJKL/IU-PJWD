@@ -1,4 +1,4 @@
-// define the parameter of the onSelect function
+// define the parameter for the component
 interface Props {
     onSelectRating: (rating: string) => void;
 }

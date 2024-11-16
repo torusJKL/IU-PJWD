@@ -1,33 +1,33 @@
-import { useState } from "react";
 import axios from "axios";
 import { faCheck, faEdit, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { wineEntry } from "./types";
 
-// define the parameter of the onSelect function
+// define the parameter for the component
 interface Props {
     wines: wineEntry[];
     wine: wineEntry;
+    winesInEditMode: number[];
     onWineAction: (wines: wineEntry[]) => void;
+    onEditModeChange: (wines: number[]) => void;
 }
 
-const WineActions = ({ wines, wine, onWineAction }: Props) => {
-    // store ids of entries that the user is editing
-    const [winesInEditMode, setWinesInEditMode] = useState<Number[]>([]);
-
+const WineActions = ({ wines, wine, winesInEditMode, onWineAction, onEditModeChange }: Props) => {
     const editWine = (wine: wineEntry): void => {
         // add the current wine to the list of wines in edit mode
-        setWinesInEditMode([...winesInEditMode, wine.id]);
+        onEditModeChange([...winesInEditMode, wine.id]);
     }
     
     const cancelEditWine = (wine: wineEntry): void => {
         // remove the current wine id from the list of wines in edit mode
-        setWinesInEditMode(winesInEditMode.filter(w => w != wine.id));
+        onEditModeChange(winesInEditMode.filter(w => w != wine.id));
     }
     
     const updateWine = (wine: wineEntry): void => {
         // remove the current wine id from the list of wines in edit mode
-        setWinesInEditMode(winesInEditMode.filter(w => w != wine.id));
+        onEditModeChange(winesInEditMode.filter(w => w != wine.id));
+
+        console.log("updating wine: ", JSON.stringify(wine))
     
         axios
             .put("http://localhost:3000/updateWine",
@@ -43,6 +43,9 @@ const WineActions = ({ wines, wine, onWineAction }: Props) => {
     }
     
     const deleteWine = (wine: wineEntry): void => {
+        // remove the current wine id from the list of wines in edit mode
+        onEditModeChange(winesInEditMode.filter(w => w != wine.id));
+        
         // store the current state of wines in case we need to rollback the delete
         const originalWines = [...wines];
     
@@ -90,5 +93,5 @@ const WineActions = ({ wines, wine, onWineAction }: Props) => {
     )
 }
 
-
+// make the component available to other files
 export default WineActions;
