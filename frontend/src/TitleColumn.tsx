@@ -24,7 +24,7 @@ const TitleColumn = ( { columnName, sorting, onSelectSorting }: Props ) => {
     }
 
     return (
-        <div className="flex justify-center w-1/4">{columnName[0].toUpperCase() + columnName.substring(1)}&nbsp;
+        <div className="flex justify-center w-1/4 space-x-0.5">{columnName[0].toUpperCase() + columnName.substring(1)}&nbsp;
             <div className={ (getSortOrderColor(columnName)) } style={{ cursor: 'pointer' }} role="button"
                     onClick={ () => {
                         const sortValue = sorting == columnName ? "id" : columnName;

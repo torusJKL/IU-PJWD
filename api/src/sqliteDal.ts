@@ -1,5 +1,5 @@
 import { Database } from "bun:sqlite";
-import { apiResponse, IDal, wineEntry, wineDelete, wineUpdate } from "./types";
+import { IDal, wineEntry, wineDelete, wineUpdate, wineStatus } from "./types";
 
 // class that handles reading and writting to the SQLite database
 export class SQLiteDal implements IDal {
@@ -17,7 +17,7 @@ export class SQLiteDal implements IDal {
     }
 
     // method that adds the wine entry to the db and returns a status code
-    addWineToDb(entry: wineEntry): wineEntry {
+    addWineToDb(entry: wineEntry): wineStatus {
 
         // create the insert query with placeholders to defend against SQL injection
         const query = this.db.query(`INSERT INTO wines (name, year, rating) ` +
@@ -28,13 +28,21 @@ export class SQLiteDal implements IDal {
             const { lastInsertRowid } = query.run(entry.name, entry.year, entry.rating);
 
             // return the newly created entry with the last id
-            return { ...entry, id: Number(lastInsertRowid) };
+            const response: wineStatus = {
+                                apiResponse:
+                                    { code: 200 },
+                                wine:
+                                { ...entry, id: Number(lastInsertRowid) }}
+            return response;
         }
         catch (error) {
             console.error(`Failed to add to db: ${error}`);
 
             // return the wine without a db id
-            return {...entry, id: undefined} ;
+            const response: wineStatus = {
+                                apiResponse:
+                                    { code: 400, message: `${error}` }};
+            return response;
         }
     }
 
@@ -68,7 +76,7 @@ export class SQLiteDal implements IDal {
     }
 
     // method to update existing wine entry
-    updateWineInDb(entry: wineUpdate): apiResponse {
+    updateWineInDb(entry: wineUpdate): wineStatus {
 
         // create the update query with placeholders to defend against SQL injection
         const query = this.db.query(`UPDATE wines ` +
@@ -80,18 +88,20 @@ export class SQLiteDal implements IDal {
             query.run(entry.name, entry.year, entry.rating, entry.id);
 
             // statusCode 0 means everything went well
-            return { code: 0, message: "Success!" } ;
+            const result: wineStatus = { apiResponse: { code: 200 }};
+            return result;
         }
         catch (error) {
             console.error(`Failed to update db: ${error}`);
 
             // any statusCode other than 0 means that there is an issue
-            return { code: -1, message: "Failed to update the wine entry in the db." } ;
+            const result: wineStatus = { apiResponse: { code: 400, message: `${error}` }};
+            return result;
         }
     }
 
     // method to delete a wine entry
-    deleteWineFromDb(entry: wineDelete): apiResponse {
+    deleteWineFromDb(entry: wineDelete): wineStatus {
 
         // create the delete query with placeholders to defend against SQL injection
         const query = this.db.query(`DELETE FROM wines ` +
@@ -102,13 +112,15 @@ export class SQLiteDal implements IDal {
             query.run(entry.id);
 
             // statusCode 0 means everything went well
-            return { code: 0, message: "Success!" } ;
+            const result: wineStatus = { apiResponse: { code: 200 }};
+            return result;
         }
         catch (error) {
             console.error(`Failed to delete from db: ${error}`);
 
             // any statusCode other than 0 means that there is an issue
-            return { code: -1, message: "Failed to delete the wine entry from the db." } ;
+            const result: wineStatus = { apiResponse: { code: 400, message: `${error}` }};
+            return result;
         }
     }
 }

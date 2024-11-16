@@ -29,13 +29,19 @@ export type wineUpdate = typeof wineUpdate.static;
 // the type of the API reponse
 export type apiResponse = {
 code: number,
-message: string,
+message?: string,
+}
+
+// combined type with api status and an optional wine entry
+export type wineStatus = {
+  apiResponse: apiResponse,
+  wine?: wineEntry,
 }
 
 // the interface for the database class
 export interface IDal {
-    addWineToDb(entry: wineEntry): wineEntry;
+    addWineToDb(entry: wineEntry): wineStatus;
     getWineFromDb(sorting: string): wineEntry[];
-    updateWineInDb(entry: wineUpdate): apiResponse;
-    deleteWineFromDb(entry: wineDelete): apiResponse;
+    updateWineInDb(entry: wineUpdate): wineStatus;
+    deleteWineFromDb(entry: wineDelete): wineStatus;
 }

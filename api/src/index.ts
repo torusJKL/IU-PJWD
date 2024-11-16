@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { cors } from '@elysiajs/cors'
 import { swagger } from '@elysiajs/swagger'
 import { SQLiteDal } from "./sqliteDal";
-import { wineEntry, wineUpdate, wineDelete } from "./types";
+import { wineEntry, wineUpdate, wineDelete, apiResponse } from "./types";
 
 // create the class to use SQLite
 const db = new SQLiteDal();
@@ -17,14 +17,14 @@ const app = new Elysia()
   // route to add new wine entries
   .post('/addWine', ({ body, error }) => {
     // use the class method to write to the DB
-    const newWine = db.addWineToDb(body);
+    const result = db.addWineToDb(body);
 
     // return a HTTP status code of 400 if there is an issue
-    if (newWine.id == undefined){
-      return error(400)
+    if (result.apiResponse.code != 200){
+      return error(result.apiResponse.code, result.apiResponse.message)
     }
 
-		return newWine
+		return result;
 	},
   // validate the mandatory fields of the received JSON
   { body: wineEntry })
@@ -50,27 +50,27 @@ const app = new Elysia()
   // route to update existing wine entires
   .put('/updateWine', ({ body, error }) => {
     // use the class method to write to the DB
-    const status = db.updateWineInDb(body);
+    const result = db.updateWineInDb(body);
 
     // return a HTTP status code of 400 if there is an issue
-    if (status.code != 0){
-      return error(400, status)
+    if (result.apiResponse.code != 200){
+      return error(result.apiResponse.code, result.apiResponse.message)
     }
 
-		return status
+		return result
   },
   // validate the mandatory fields of the received JSON
   { body: wineUpdate })
 
   .delete('deleteWine', ({ body, error }) => {
-    const status = db.deleteWineFromDb(body);
+    const result = db.deleteWineFromDb(body);
 
     // return a HTTP status code of 400 if there is an issue
-    if (status.code != 0){
-      return error(400, status)
+    if (result.apiResponse.code != 200){
+      return error(result.apiResponse.code, result.apiResponse.message)
     }
 
-		return status
+		return result
   },
   // validate the mandatory fields of the received JSON
   { body: wineDelete })

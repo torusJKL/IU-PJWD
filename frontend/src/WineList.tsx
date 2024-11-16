@@ -17,6 +17,9 @@ const WineList = ( { rating }: { rating: string }) => {
     // store ids of entries that the user is editing
     const [winesInEditMode, setWinesInEditMode] = useState<number[]>([]);
 
+    // store error messages in the app state
+    const [errorMessage, setErrorMessage] = useState<string>("");
+
     // app state to store the input values before sending to the API
     const [newWine, setNewWine] = useState<wineEntry>({
         id: 0,
@@ -33,6 +36,9 @@ const WineList = ( { rating }: { rating: string }) => {
 
             // once promise is fullfilled
             .then(res => {
+                // reset the error message if any exists
+                setErrorMessage("");
+
                 // assign data to local variable so that we can manipulate it easier
                 let wines = res.data;
 
@@ -47,15 +53,22 @@ const WineList = ( { rating }: { rating: string }) => {
             })
 
             // print errors to console if there is an issue
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+
+                // set UI error message
+                setErrorMessage(err);
+            });
     }, [rating, sorting]);
 
     return (
         <div className="flex flex-col gap-2 p-7 h-[500px] w-full justify-start items-center">
+            <div className="font-bold text-red-600 min-h-6">{errorMessage}</div>
             <WineInput
                 newWine={newWine}
                 onAddingWine={ (wine) => setWines([wine, ...wines]) }
                 onWineChange={ (newWine) => setNewWine(newWine) }
+                onErrorChange={ (error) => setErrorMessage(error) }
             />
             <div className="max-h-auto xs:min-h-12 w-5/6 bg-vintage-red text-slate-300 font-bold rounded">
                 <div className="flex flex-col xs:flex-row min-h-full items-center my-1 xs:mt-0">
@@ -81,6 +94,7 @@ const WineList = ( { rating }: { rating: string }) => {
                             winesInEditMode={winesInEditMode}
                             onWineAction={ (wines) => setWines(wines) }
                             onEditModeChange={ (winesInEditMode) => setWinesInEditMode(winesInEditMode) }
+                            onErrorChange={ (error) => setErrorMessage(error) }
                         />
                     </div>
                 </div>

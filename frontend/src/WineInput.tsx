@@ -1,4 +1,4 @@
-import { wineEntry } from "./types";
+import { wineEntry, wineStatus } from "./types";
 import axios from "axios";
 import WineInputFields from "./WineInputFields";
 
@@ -7,14 +7,15 @@ interface Props {
     newWine: wineEntry;
     onWineChange: (wine: wineEntry) => void;
     onAddingWine: (wine: wineEntry) => void;
+    onErrorChange: (error: string) => void;
 }
 
-const WineInput = ({ newWine, onWineChange, onAddingWine }: Props) => {
+const WineInput = ({ newWine, onWineChange, onAddingWine, onErrorChange }: Props) => {
     const addWineToDb = (newWine: wineEntry): void => {
 
         // send request with the new wine information to the API
         axios
-            .post<wineEntry>("http://localhost:3000/addWine",
+            .post<wineStatus>("http://localhost:3000/addWine",
                 {
                     name: newWine.name,
                     year: typeof(newWine.year) == "string" ?
@@ -24,10 +25,22 @@ const WineInput = ({ newWine, onWineChange, onAddingWine }: Props) => {
                 })
             
             // update wine app state once succesfully stored in db
-            .then((res) => onAddingWine(res.data))
+            .then((res) => {
+                // make sure we only add existing entries
+                if (res.data.wine != undefined){
+                    onAddingWine(res.data.wine);
+
+                    // reset error message if any exists
+                    onErrorChange("");
+                }})
 
             // write error to console in case of issues
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err.response.data);
+
+                // set UI error message
+                onErrorChange(err.response.data);
+            });
     }
 
     return (
