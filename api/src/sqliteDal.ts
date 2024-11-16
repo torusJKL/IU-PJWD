@@ -19,13 +19,13 @@ export class SQLiteDal implements IDal {
     // method that adds the wine entry to the db and returns a status code
     addWineToDb(entry: wineEntry): wineEntry {
 
-        // create the insert query
+        // create the insert query with placeholders to defend against SQL injection
         const query = this.db.query(`INSERT INTO wines (name, year, rating) ` +
-                                    `VALUES ('${entry.name}', ${entry.year}, ${entry.rating})`);
+                                    `VALUES (?, ?, ?)`);
 
         try {
             // run the insert query and desrtuct the returned last row id
-            const { lastInsertRowid } = query.run();
+            const { lastInsertRowid } = query.run(entry.name, entry.year, entry.rating);
 
             // return the newly created entry with the last id
             return { ...entry, id: Number(lastInsertRowid) };
@@ -70,14 +70,14 @@ export class SQLiteDal implements IDal {
     // method to update existing wine entry
     updateWineInDb(entry: wineUpdate): apiResponse {
 
-        // create the update query
+        // create the update query with placeholders to defend against SQL injection
         const query = this.db.query(`UPDATE wines ` +
-                                    `SET name = '${entry.name}', year = ${entry.year}, rating = ${entry.rating} ` +
-                                    `WHERE id = ${entry.id}`);
+                                    `SET name = ?, year = ?, rating = ? ` +
+                                    `WHERE id = ?`);
 
         try {
             // run the update query
-            query.run();
+            query.run(entry.name, entry.year, entry.rating, entry.id);
 
             // statusCode 0 means everything went well
             return { code: 0, message: "Success!" } ;
@@ -93,13 +93,13 @@ export class SQLiteDal implements IDal {
     // method to delete a wine entry
     deleteWineFromDb(entry: wineDelete): apiResponse {
 
-        // create the delete query
+        // create the delete query with placeholders to defend against SQL injection
         const query = this.db.query(`DELETE FROM wines ` +
-                                    `WHERE id = ${entry.id}`);
+                                    `WHERE id = ?`);
 
         try {
             // run the delete query
-            query.run();
+            query.run(entry.id);
 
             // statusCode 0 means everything went well
             return { code: 0, message: "Success!" } ;
