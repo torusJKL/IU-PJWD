@@ -9,7 +9,7 @@ interface Props {
 const WineInputFields = ( { newWine, onWineChange }: Props ) => {
 
     // make updates to the state based on the received event name and value
-    const handleChange = (event: any): void => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         
         // assign to local variable for readeaility
         const inputName = event.target.name;

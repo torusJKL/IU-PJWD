@@ -26,11 +26,17 @@ const TitleColumn = ( { columnName, sorting, onSelectSorting }: Props ) => {
     return (
         <div className="flex justify-center w-1/4">{columnName[0].toUpperCase() + columnName.substring(1)}
             <div className={ (getSortOrderColor(columnName)) } style={{ cursor: 'pointer' }} role="button"
-                    onClick={ () => { sorting == columnName ? onSelectSorting("id") : onSelectSorting(columnName) }}>
+                    onClick={ () => {
+                        const sortValue = sorting == columnName ? "id" : columnName;
+                        onSelectSorting(sortValue);
+                        }}>
                 <FontAwesomeIcon icon={faCaretUp} />
             </div>
             <div className={ (getSortOrderColor(`-${columnName}`)) } style={{ cursor: 'pointer' }} role="button"
-                    onClick={ () => { sorting == `-${columnName}` ? onSelectSorting("id") : onSelectSorting(`-${columnName}`) }}>
+                    onClick={ () => {
+                        const sortValue = sorting == `-${columnName}` ? "-id" : `-${columnName}`;
+                        onSelectSorting(sortValue);
+                        }}>
                 <FontAwesomeIcon icon={faCaretDown} />
             </div>
         </div>

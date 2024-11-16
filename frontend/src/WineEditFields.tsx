@@ -9,7 +9,7 @@ interface Props {
 
 const WineEditFields = ( { wine, wines, onWineChange }: Props ) => {
     // make updates to the state based on the received event name and value
-    const handleChange = (event: any): void => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         // assign to local variable for readeaility and convert year & rating to number
         const inputName = event.target.name;
         const inputValue = event.target.name != "name" &&

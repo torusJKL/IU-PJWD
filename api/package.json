@@ -1,9 +1,11 @@
 {
   "name": "api",
   "version": "1.0.50",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build src/index.ts --target=bun --outdir dist",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@elysiajs/cors": "^1.1.1",
@@ -11,7 +13,9 @@
     "elysia": "latest"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "eslint": "9.13.0",
+    "typescript-eslint": "^8.14.0"
   },
   "module": "src/index.js"
 }

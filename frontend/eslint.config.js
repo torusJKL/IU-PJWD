@@ -28,10 +28,6 @@ export default tseslint.config(
       ],
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
-    },
-    // parserOptions: {
-    //   project: ['./tsconfig.node.json', './tsconfig.app.json'],
-    //   tsconfigRootDir: import.meta.dirname,
-    // },
+    }
   },
 )
