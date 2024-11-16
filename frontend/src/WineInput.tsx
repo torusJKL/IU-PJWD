@@ -37,8 +37,10 @@ const WineInput = ({ onAddingWine }: Props) => {
             .post<wineEntry>("http://localhost:3000/addWine",
                 {
                     name: newWine.name,
-                    year: newWine.year,
-                    rating: newWine.rating,
+                    year: typeof(newWine.year) == "string" ?
+                            Number.parseInt(newWine.year) : newWine.year,
+                    rating: typeof(newWine.rating) == "string" ?
+                            Number(newWine.rating) : newWine.rating,
                 })
             
             // update wine app state once succesfully stored in db

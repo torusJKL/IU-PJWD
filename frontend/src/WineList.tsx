@@ -4,9 +4,8 @@ import { wineEntry } from "./types";
 import axios from "axios";
 import RatingStars from "./RatingStars";
 import TitleColumn from "./TitleColumn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import WineInput from "./WineInput";
+import WineActions from "./WineActions";
 
 const WineList = ( { rating }: { rating: string }) => {
     // keep the wine list in this app state
@@ -40,25 +39,6 @@ const WineList = ( { rating }: { rating: string }) => {
             .catch(err => console.log(err));
     }, [rating, sorting]);
 
-    const deleteWine = (wine: wineEntry): void => {
-        // store the current state of wines in case we need to rollback the delete
-        const originalWines = [...wines];
-
-        // remove the wine from the state to immediatelly update the UI
-        setWines(wines.filter(w => w.id != wine.id));
-
-        axios
-            // delete the selected wine from the DB
-            .delete(`http://localhost:3000/deleteWine`, { data: { id: wine.id } })
-
-            // in case there is an issue print the error to the console
-            // and return the wines state to the original state
-            .catch((err) => {
-                console.log(err);
-                setWines(originalWines)
-            });
-    };
-
     return (
         <div className="flex flex-col gap-2 p-7 h-[500px] w-full justify-start items-center">
             <WineInput onAddingWine={ (wine) => setWines([wine, ...wines]) } />
@@ -79,10 +59,7 @@ const WineList = ( { rating }: { rating: string }) => {
                         <RatingStars rating={wine.rating} />
                     </div>
                     <div className="flex justify-center w-1/4" key={wine.id}>
-                        <div className="px-2"
-                             onClick={ () => { deleteWine(wine) }}>
-                            <FontAwesomeIcon icon={faTrash} />
-                        </div>
+                        <WineActions wines={wines} wine={wine} onWineAction={ (wines) => setWines(wines) } />
                     </div>
                 </div>
             </div>
