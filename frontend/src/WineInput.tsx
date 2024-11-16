@@ -49,7 +49,7 @@ const WineInput = ({ onAddingWine }: Props) => {
     }
 
     return (
-        <div className="h-14 w-5/6 bg-amber-300 rounded">
+        <div className="min-h-14 w-5/6 bg-amber-300 rounded">
             <div className="flex min-h-full items-center">
                 <div className="flex justify-center w-1/4">
                     <input
