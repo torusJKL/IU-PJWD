@@ -57,7 +57,7 @@ const WineList = ( { rating }: { rating: string }) => {
                 onAddingWine={ (wine) => setWines([wine, ...wines]) }
                 onWineChange={ (newWine) => setNewWine(newWine) }
             />
-            <div className="max-h-auto xs:min-h-12 w-5/6 bg-orange-300 rounded">
+            <div className="max-h-auto xs:min-h-12 w-5/6 bg-vintage-red text-slate-300 font-bold rounded">
                 <div className="flex flex-col xs:flex-row min-h-full items-center my-1 xs:mt-0">
                     <TitleColumn columnName="name" sorting={sorting} onSelectSorting={(sort) => setSorting(sort)} />
                     <TitleColumn columnName="year" sorting={sorting} onSelectSorting={(sort) => setSorting(sort)} />
@@ -66,7 +66,7 @@ const WineList = ( { rating }: { rating: string }) => {
                 </div>
             </div>
             {wines.map(wine =>
-            <div className="max-h-auto min-h-40 xs:min-h-12 w-5/6 bg-slate-400 rounded" key={wine.id}>
+            <div className="max-h-auto min-h-40 xs:min-h-12 w-5/6 bg-vintage-green rounded" key={wine.id}>
                 <div className="flex flex-col justify-around xs:flex-row min-h-36 xs:min-h-12 items-center my-2 xs:my-0">
                     <WineFields
                         wine={wine}

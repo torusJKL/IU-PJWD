@@ -31,12 +31,12 @@ const WineInput = ({ newWine, onWineChange, onAddingWine }: Props) => {
     }
 
     return (
-        <div className="min-h-40 xs:min-h-12 w-5/6 bg-amber-300 rounded">
+        <div className="min-h-40 xs:min-h-12 w-5/6 bg-vintage-green rounded">
             <div className="flex flex-col justify-around xs:flex-row min-h-36 xs:min-h-full items-center my-2 xs:my-0">
                 <WineInputFields newWine={newWine} onWineChange={ (wine) => onWineChange(wine) } />
                 <div className="flex justify-center w-3/4 xs:w-1/4">
                     <button
-                        className="bg-orange-300 disabled:bg-slate-100 disabled:text-gray-300 px-2 py-1 rounded w-11/12 xs:w-3/6"
+                        className="bg-vintage-red text-slate-300 font-bold disabled:bg-slate-100 disabled:text-gray-300 px-2 py-1 rounded w-11/12 xs:w-3/6"
                         disabled={newWine.name == "" || newWine.year == null}
                         onClick={ () => addWineToDb(newWine) }>
                             Add

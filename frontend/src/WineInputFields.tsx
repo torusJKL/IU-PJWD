@@ -42,7 +42,7 @@ const WineInputFields = ( { newWine, onWineChange }: Props ) => {
             </div>
             <div className="flex justify-center w-3/4 xs:w-1/4">
                 <select
-                    className="text-center w-11/12 xs:w-3/6 px-2 py-1 rounded"
+                    className="text-center w-11/12 xs:w-3/6 px-2 py-2 bg-vintage-red text-slate-300 rounded"
                     name="rating"
                     onChange={ (event) => handleChange(event) }
                     value={newWine.rating}>
