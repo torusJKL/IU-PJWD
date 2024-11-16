@@ -7,7 +7,8 @@ function App() {
   const [rating, setRating] = useState<string>("");
 
   return (
-    <div className="min-h-screen bg-vintage-beige">
+    // react can only have 1 top element hence we wrap all of them with this pseudo tag
+    <>
       {/* use centered grid layout for title and drop down*/}
       <div className="grid items-center justify-center text-center pt-4">
         <div>
@@ -20,7 +21,7 @@ function App() {
 
       {/* inject the Winelist component and provide it the rating value */}
       <WineList rating={rating}/>
-    </div>
+    </>
   )
 }
 

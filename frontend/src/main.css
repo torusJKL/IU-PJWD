@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* make the body backgound a kind of beige */
+body {
+  background-color: #ede0a6;
+}
