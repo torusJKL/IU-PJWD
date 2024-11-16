@@ -24,25 +24,25 @@ const WineInputFields = ( { newWine, onWineChange }: Props ) => {
 
     return (
         <>
-            <div className="flex justify-center w-1/4">
+            <div className="flex justify-center w-3/4 xs:w-1/4">
                 <input
                     type="text"
-                    className="w-5/6 px-2 py-1 rounded"
+                    className="w-11/12 xs:w-5/6 px-2 py-1 rounded"
                     name="name"
                     value = { newWine.name }
                     onChange={ (event) => handleChange(event) } />
             </div>
-            <div className="flex justify-center w-1/4">
+            <div className="flex justify-center w-3/4 xs:w-1/4">
                 <input
                     type="text"
-                    className="text-center w-3/6 px-2 py-1 rounded"
+                    className="text-center w-11/12 xs:w-4/6 px-2 py-1 rounded"
                     name="year"
                     value = { newWine.year == 0 ? new Date().getFullYear() : newWine.year }
                     onChange={ (event) => handleChange(event) } />
             </div>
-            <div className="flex justify-center w-1/4">
+            <div className="flex justify-center w-3/4 xs:w-1/4">
                 <select
-                    className="text-center w-3/6 px-2 py-1 rounded"
+                    className="text-center w-11/12 xs:w-3/6 px-2 py-1 rounded"
                     name="rating"
                     onChange={ (event) => handleChange(event) }
                     value={newWine.rating}>
