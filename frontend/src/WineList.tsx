@@ -61,7 +61,7 @@ const WineList = ( { rating }: { rating: string }) => {
 
     return (
         <div className="flex flex-col gap-2 p-7 h-[500px] w-full justify-start items-center">
-            <WineInput onAddingWine={ (wine) => setWines([...wines, wine]) } />
+            <WineInput onAddingWine={ (wine) => setWines([wine, ...wines]) } />
             <div className="min-h-14 w-5/6 bg-orange-300 rounded">
                 <div className="flex min-h-full items-center">
                     <TitleColumn columnName="name" sorting={sorting} onSelectSorting={(sort) => setSorting(sort)} />
