@@ -9,9 +9,7 @@ interface Props {
 
 const WineEditFields = ( { wine, wines, onWineChange }: Props ) => {
     // make updates to the state based on the received event name and value
-    const handleChange = (wineId: number, event: any): void => {
-        const filteredWines = wines.filter(w => w.id != wineId)
-        
+    const handleChange = (event: any): void => {
         // assign to local variable for readeaility and convert year & rating to number
         const inputName = event.target.name;
         const inputValue = event.target.name != "name" &&
@@ -24,8 +22,21 @@ const WineEditFields = ( { wine, wines, onWineChange }: Props ) => {
             [inputName]: inputValue
         };
 
-        // update the newWine state with the value of the received input field
-        onWineChange([...filteredWines, updatedWine]);
+        // change the value of the wine in place so that the position doesn't change
+        const newWines = [...wines]
+        for (let i = 0; i < newWines.length; ++i){
+            // skip if this is the incorrect wine entry
+            if (newWines[i].id != updatedWine.id)
+                continue;
+            
+            // assign all values, even if the value didn't change
+            newWines[i].name = updatedWine.name;
+            newWines[i].year = updatedWine.year;
+            newWines[i].rating = updatedWine.rating;
+        }
+
+        // update the wine state with the value of the received input field
+        onWineChange(newWines);
     }
 
     return (
@@ -36,7 +47,7 @@ const WineEditFields = ( { wine, wines, onWineChange }: Props ) => {
                     className="w-5/6 px-2 py-1 rounded"
                     name="name"
                     value = { wine.name }
-                    onChange={ (event) => handleChange(wine.id, event) } />
+                    onChange={ (event) => handleChange(event) } />
             </div>
             <div className="flex justify-center w-1/4">
                 <input
@@ -44,13 +55,13 @@ const WineEditFields = ( { wine, wines, onWineChange }: Props ) => {
                     className="text-center w-3/6 px-2 py-1 rounded"
                     name="year"
                     value = { wine.year == 0 ? new Date().getFullYear() : wine.year }
-                    onChange={ (event) => handleChange(wine.id, event) } />
+                    onChange={ (event) => handleChange(event) } />
             </div>
             <div className="flex justify-center w-1/4">
                 <select
                     className="text-center w-3/6 px-2 py-1 rounded"
                     name="rating"
-                    onChange={ (event) => handleChange(wine.id, event) }
+                    onChange={ (event) => handleChange(event) }
                     value={wine.rating}>
                     <option value="1">1</option>
                     <option value="2">2</option>

@@ -27,8 +27,6 @@ const WineActions = ({ wines, wine, winesInEditMode, onWineAction, onEditModeCha
         // remove the current wine id from the list of wines in edit mode
         onEditModeChange(winesInEditMode.filter(w => w != wine.id));
 
-        console.log("updating wine: ", JSON.stringify(wine))
-    
         axios
             .put("http://localhost:3000/updateWine",
                 {
