@@ -28,7 +28,7 @@ const WineList = ( { rating }: { rating: string }) => {
         rating: 1,
     });
 
-    // will be called after pages' first render or rating or sortOrder is updated
+    // will be called after pages' first render or rating or sorting is updated
     useEffect(() => {
         axios
             // get all wines from API

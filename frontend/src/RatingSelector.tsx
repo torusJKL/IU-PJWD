@@ -10,13 +10,13 @@ const RatingSelector = ({ onSelectRating }: Props) => {
           // store selected rating to app state every time a change is registered
           onChange={(event) => {onSelectRating(event.target.value)}}>
 
-            {/* dropdown values and viable text*/}
-            <option value="">All ratings</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
+            {/* dropdown values and viewable text*/}
+            <option value="">Show all ratings</option>
+            <option value="1">1 Star only</option>
+            <option value="2">2 Stars only</option>
+            <option value="3">3 Stars only</option>
+            <option value="4">4 Stars only</option>
+            <option value="5">5 Stars only</option>
         </select>
     )
 }
