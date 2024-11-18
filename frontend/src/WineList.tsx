@@ -63,7 +63,7 @@ const WineList = ( { rating }: { rating: string }) => {
 
     return (
         <div className="flex flex-col gap-2 p-7 h-[500px] w-full justify-start items-center">
-            <div className="font-bold text-red-600 min-h-6">{errorMessage}</div>
+            <div className="font-bold text-red-600 min-h-10 xs:min-h-6">{errorMessage}</div>
             <WineInput
                 newWine={newWine}
                 onAddingWine={ (wine) => setWines([wine, ...wines]) }
