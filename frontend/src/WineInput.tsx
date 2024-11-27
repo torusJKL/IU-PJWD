@@ -13,8 +13,8 @@ interface Props {
 const WineInput = ({ newWine, onWineChange, onAddingWine, onErrorChange }: Props) => {
     const addWineToDb = (newWine: wineEntry): void => {
 
-        // send request with the new wine information to the API
         axios
+            // send request with the new wine information to the API
             .post<wineStatus>("http://localhost:3000/addWine",
                 {
                     name: newWine.name,

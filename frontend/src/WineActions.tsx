@@ -13,22 +13,55 @@ interface Props {
     onErrorChange: (error: string) => void;
 }
 
+// a set to keep old state of the wines (before edit)
+const wineUndoSet = new Set<wineEntry>();
+
 const WineActions = ({ wines, wine, winesInEditMode, onWineAction, onEditModeChange, onErrorChange }: Props) => {
     const editWine = (wine: wineEntry): void => {
         // add the current wine to the list of wines in edit mode
         onEditModeChange([...winesInEditMode, wine.id]);
+
+        // clone the object so that user edits will not change the values
+        const clone = structuredClone(wine);
+        // add the cloned wine to the set in case we need the old values
+        wineUndoSet.add(clone);
     }
     
     const cancelEditWine = (wine: wineEntry): void => {
         // remove the current wine id from the list of wines in edit mode
         onEditModeChange(winesInEditMode.filter(w => w != wine.id));
+
+        wineUndoSet.forEach(oldWineState => {
+            // skip unrelated entries
+            if (oldWineState.id != wine.id)
+                return;
+
+            // restore the old values in the original object
+            wine.name = oldWineState.name;
+            wine.year = oldWineState.year;
+            wine.rating = oldWineState.rating;
+
+            // remove the entry from the set
+            wineUndoSet.delete(oldWineState);
+        })
     }
     
     const updateWine = (wine: wineEntry): void => {
         // remove the current wine id from the list of wines in edit mode
         onEditModeChange(winesInEditMode.filter(w => w != wine.id));
 
+        // remove the cloned wine state from the set
+        wineUndoSet.forEach(oldWineState => {
+            // skip unrelated entries
+            if (oldWineState.id != wine.id)
+                return;
+
+            // remove the entry from the set
+            wineUndoSet.delete(oldWineState);
+        })
+
         axios
+            // update the database with the new wine values
             .put<wineStatus>("http://localhost:3000/updateWine",
                 {
                     id: wine.id,
