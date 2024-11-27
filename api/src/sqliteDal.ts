@@ -123,4 +123,58 @@ export class SQLiteDal implements IDal {
             return result;
         }
     }
+
+    // method to add random wines to the db
+    createRandomEntries(count: number): wineEntry[] {
+        // list of grapes to choose from
+        const grapes = ['Merlot', 'Shiraz', 'Cabernet Sauvignon', 'Affenthaler', 'Schönburger', 'Pinot Noir'];
+        
+        // initialize the index
+        let index = 0;
+
+        const wines: wineEntry[] = [];
+
+        // loop until the index has reached the number of wines requested
+        while (count > index){
+            // pick random grape name from the list
+            const name = grapes[Math.floor(Math.random() * grapes.length)];
+
+            // pick random year between 2001 and 2024 (including)
+            const year = Math.floor(Math.random() * 24) + 2001;
+
+            // create random rating between 1 and 5 (including)
+            const rating = Math.floor(Math.random() * 5) + 1;
+
+            // add wine to the db
+            const result = this.addWineToDb({ name, year, rating });
+
+            // check if there was a duplication
+            if (result.apiResponse.code != 200 && result.apiResponse.message?.includes('UNIQUE')){
+                console.log('Wine already exists in the db.');
+
+                // continue the loop and don't increase the index
+                continue;
+            }
+
+            // check if there is a general issue
+            if (result.apiResponse.code != 200){
+                console.log('There was a db error. Cannot add the wine.');
+
+                // continue the loop and don't increase the index
+                continue;
+            }
+
+            // this should never happen but let's make sure
+            if (result.wine == null)
+                continue;
+
+            // add the wine to the array to be returned
+            wines.push(result.wine)
+
+            // the wine was added to the db and we increase the index
+            ++index;
+        }
+
+        return wines;
+    }
 }

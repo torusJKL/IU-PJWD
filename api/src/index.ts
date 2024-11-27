@@ -21,7 +21,7 @@ const app = new Elysia()
 
     // return a HTTP status code of 400 if there is an issue
     if (result.apiResponse.code != 200){
-      return error(result.apiResponse.code, result.apiResponse.message)
+      return error(result.apiResponse.code, result.apiResponse.message);
     }
 
 		return result;
@@ -35,7 +35,7 @@ const app = new Elysia()
     // make sure that no invalid sorting values are processed (SQL injection protection)
     const allowedSorting = ["id", "-id", "name", "-name", "year", "-year", "rating", "-rating"];
     if (false == allowedSorting.includes(query.sorting)){
-      return []
+      return [];
     }
 
     // use the class method to rertieve all wine entries of the db
@@ -44,7 +44,7 @@ const app = new Elysia()
   },
   // validate the mandatory query parameter exists
   { query: t.Object({
-      sorting: t.String()})
+      sorting: t.String()}),
   })
 
   // route to update existing wine entires
@@ -54,10 +54,10 @@ const app = new Elysia()
 
     // return a HTTP status code of 400 if there is an issue
     if (result.apiResponse.code != 200){
-      return error(result.apiResponse.code, result.apiResponse.message)
+      return error(result.apiResponse.code, result.apiResponse.message);
     }
 
-		return result
+		return result;
   },
   // validate the mandatory fields of the received JSON
   { body: wineUpdate })
@@ -67,13 +67,19 @@ const app = new Elysia()
 
     // return a HTTP status code of 400 if there is an issue
     if (result.apiResponse.code != 200){
-      return error(result.apiResponse.code, result.apiResponse.message)
+      return error(result.apiResponse.code, result.apiResponse.message);
     }
 
-		return result
+		return result;
   },
   // validate the mandatory fields of the received JSON
   { body: wineDelete })
+
+  // route to add random wine entries to the db
+  .get('/createRandomEntries/:count', ({ params: { count } }) => {
+    // return the created wines
+    return db.createRandomEntries(Number.parseInt(count));
+  })
 
   // make the api available on port 3000
   .listen(3000);

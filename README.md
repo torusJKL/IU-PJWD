@@ -70,6 +70,17 @@ bun run build
 bun run preview
 ```
 
+## Create random entries (optional)
+
+Calling the endpoint http://localhost:3000/createRandomEntries/1 creates 1 random entry.
+To create more entries increase the number at the end of the URL.
+
+Creating 5 random entries from the terminal:
+
+```shell
+curl -w "\n" -X GET http://localhost:3000/createRandomEntries/5
+```
+
 ## UI URLs
 
 The api provides a Swagger UI on http://localhost:3000/swagger.
